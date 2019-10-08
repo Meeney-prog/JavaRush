@@ -11,32 +11,32 @@ import java.util.List;
 Рефакторинг в соответствии с Naming and Code Convention
 */
 public class Solution {
-    public static final String defaultFileName = "C:/tmp/strange_file_name.tmp";
+    public static final String DEFAULT_FILE_NAME = "C:/tmp/strange_file_name.tmp";
 
     private final String localFileName;
     private List<String> contentAslines;
     private boolean fileLoaded;
 
     public Solution(String firstFileName) {
-        localFileName = firstFileName == null ? defaultFileName : firstFileName;
+        localFileName = firstFileName == null ? DEFAULT_FILE_NAME : firstFileName;
     }
 
     public static void main(String[] args) throws FileNotFoundException {
         String fileName = Solution.class.getResource("Solution.java").getPath();
 
         Solution solution = new Solution(fileName);
-        solution.DownloadFileContent();
-        if (solution.getFileLoaded()) {
-            System.out.println(solution.isexpectedline("public class Solution {"));   // Expected true
-            System.out.println(solution.isexpectedline(" public class Solution {"));  // Expected false
+        solution.downloadFileContent();
+        if (solution.isFileLoaded()) {
+            System.out.println(solution.hasExpectedLine("public class Solution {"));   // Expected true
+            System.out.println(solution.hasExpectedLine(" public class Solution {"));  // Expected false
         }
     }
 
-    public boolean getFileLoaded() {
+    public boolean isFileLoaded() {
         return fileLoaded;
     }
 
-    public void DownloadFileContent() {
+    public void downloadFileContent() {
         try {
             contentAslines = Files.readAllLines((new File(localFileName)).toPath(), Charset.defaultCharset());
             fileLoaded = true;
@@ -45,7 +45,7 @@ public class Solution {
         }
     }
 
-    public boolean isexpectedline(String expectedline) {
-        return contentAslines.contains(expectedline);
+    public boolean hasExpectedLine(String expectedLine) {
+        return contentAslines.contains(expectedLine);
     }
 }

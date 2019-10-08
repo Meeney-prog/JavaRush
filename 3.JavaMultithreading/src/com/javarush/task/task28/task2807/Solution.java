@@ -1,14 +1,21 @@
 package com.javarush.task.task28.task2807;
 
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /* 
 Знакомство с ThreadPoolExecutor
 */
 public class Solution {
     public static void main(String[] args) throws InterruptedException {
+        LinkedBlockingQueue<Runnable> queue = new LinkedBlockingQueue<>(10);
+        for (int i = 1; i <= 10; i++) {
+            final int localID = i;
+            queue.add(()->doExpensiveOperation(localID));
+        }
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(3, 5, 1000, TimeUnit.MILLISECONDS, queue);
+        threadPoolExecutor.prestartAllCoreThreads();
+        threadPoolExecutor.shutdown();
+        threadPoolExecutor.awaitTermination(5, TimeUnit.SECONDS);
         // Add your code here
 
         /* Example output

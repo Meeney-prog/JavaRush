@@ -26,17 +26,16 @@ public class Solution {
         for (final Character character : characters) {
             final String member = character.toString();
             System.out.println(member + " присоединился к игре");
-            new Thread() {
-                @Override
-                public void run() {
-                    System.out.println(member + " готовится играть");
-                    if (!isEveryoneReady) {
-                        isEveryoneReady = true;
-                        System.out.println("Игра началась!");
-                    }
-                    character.run();
+            new Thread(() -> {
+                System.out.println(member + " готовится играть");
+                phaser.arriveAndAwaitAdvance();
+                if (!isEveryoneReady) {
+                    isEveryoneReady = true;
+                    System.out.println("Игра началась!");
                 }
-            }.start();
+                character.run();
+            }).start();
         }
+        phaser.arriveAndDeregister();
     }
 }

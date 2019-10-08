@@ -42,6 +42,12 @@ public class Solution {
     }
 
     public static Callable<String> getTask(final int i) {
-        return null;
+        return ()->{
+            long sum = 0;
+            for (int j = 1; j <= i ; j++) {
+                sum+=j;
+            }
+            return  ""+sum;
+        };
     }
 }

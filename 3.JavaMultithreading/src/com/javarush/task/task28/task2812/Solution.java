@@ -13,14 +13,13 @@ public class Solution {
         ExecutorService executor = Executors.newFixedThreadPool(5);
         for (int i = 1; i <= 10; i++) {
             final int localId = i;
-            executor.submit(new Runnable() {
-                public void run() {
-                    doExpensiveOperation(localId);
-                }
-            });
+            executor.submit(() -> doExpensiveOperation(localId));
         }
 
-        executor.shutdownNow();
+        List<Runnable> list = executor.shutdownNow();
+        for (Runnable r :list){
+            System.out.println(r+ " was not completed");
+        }
     }
 
     private static void doExpensiveOperation(int localId) {

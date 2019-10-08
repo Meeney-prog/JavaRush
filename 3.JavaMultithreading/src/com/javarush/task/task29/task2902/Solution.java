@@ -11,19 +11,19 @@ import java.nio.file.Paths;
 */
 public class Solution {
     public static void main(String[] args) throws IOException, InterruptedException, URISyntaxException {
-        Solution Solution = new Solution();
-        String name_of_file_to_be_opened_by_notepad = Solution.Getabsolutepathtodefaulttxtfile().toString();
-        Process NOTEPAD = Solution.getstartnotepadprocess(name_of_file_to_be_opened_by_notepad);
-        NOTEPAD.waitFor();
+        Solution solution = new Solution();
+        String nameOfFileToBeOpenedByNotepad = solution.getAbsolutePathToDefaultTxtFile().toString();
+        Process notepad = solution.getStartNotepadProcess(nameOfFileToBeOpenedByNotepad);
+        notepad.waitFor();
     }
 
-    public Process getstartnotepadprocess(String FILE_NAME) throws IOException {
-        String[] cmd_array = new String[]{"notepad.exe", FILE_NAME};
-        return Runtime.getRuntime().exec(cmd_array);
+    public Process getStartNotepadProcess(String fileName) throws IOException {
+        String[] cmdArray = new String[]{"notepad.exe", fileName};
+        return Runtime.getRuntime().exec(cmdArray);
     }
 
-    public Path Getabsolutepathtodefaulttxtfile() throws URISyntaxException {
-        URI uRi = Solution.class.getResource("file.txt").toURI();
-        return  Paths.get(uRi);
+    public Path getAbsolutePathToDefaultTxtFile() throws URISyntaxException {
+        URI uri = Solution.class.getResource("file.txt").toURI();
+        return  Paths.get(uri);
     }
 }

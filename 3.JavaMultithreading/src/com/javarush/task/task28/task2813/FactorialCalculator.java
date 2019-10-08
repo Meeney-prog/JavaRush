@@ -11,16 +11,20 @@ public class FactorialCalculator implements Callable {
 
     @Override
     public Long call() {
-        return 0L;
+        return factorial(number);
     }
 
-    public long factorial(int number) throws InterruptedException {
+    public long factorial(int number) {
         if (number < 0) {
             throw new IllegalArgumentException("Number must be greater than zero");
         }
         long result = 1;
         while (number > 1) {
-            Thread.sleep(1);
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             result = result * number;
             number--;
         }
