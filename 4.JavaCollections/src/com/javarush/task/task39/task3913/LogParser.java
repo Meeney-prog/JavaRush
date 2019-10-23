@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQuery {
-    private static List<LogNode> logs = new ArrayList<>();
+    private List<LogNode> logs = new ArrayList<>();
 
     public LogParser(Path logDir) {
         try {
@@ -30,8 +30,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
             try (BufferedReader reader = new BufferedReader(new FileReader(file.toFile()))) {
                 while (reader.ready()) {
                     LogNode newNode = new LogNode(reader.readLine());
-                    if (!logs.contains(newNode))
-                        logs.add(newNode);
+                    logs.add(newNode);
                 }
             }
     }
@@ -323,12 +322,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
 
     @Override
     public Set<Event> getEventsForUser(String user, Date after, Date before) {
-        return logs.stream()
-                .filter(log -> log.getName().equals(user)
-                        && log.getDate() >= (after == null ? 0 : after.getTime())
-                        && log.getDate() <= (before == null ? Long.MAX_VALUE : before.getTime()))
-                .map(LogNode::getEvent)
-                .collect(Collectors.toSet());
+        return getEventsForIP(user, after, before);
     }
 
     @Override
@@ -410,7 +404,9 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
     public Set execute(String query) {
         if (query.split(" ").length == 2)
             return simpleExecute(query);
-        String pattern = "get (?<tag>\\w+)(\\sfor\\s(?<field>\\w+)\\s=\\s\"(?<value>.+?)\")?(\\sand date between\\s\"(?<after>[\\d]+.[\\d]+.[\\d]+ [\\d]+:[\\d]+:[\\d]+)\"\\sand\\s\"(?<before>[\\d]+.[\\d]+.[\\d]+ [\\d]+:[\\d]+:[\\d]+)\")?";
+        String pattern = "get (?<tag>\\w+)(\\sfor\\s(?<field>\\w+)\\s=\\s\"(?<value>.+?)\")?(\\sand date between" +
+                "\\s\"(?<after>[\\d]+.[\\d]+.[\\d]+ [\\d]+:[\\d]+:[\\d]+)\"\\sand\\s\"" +
+                "(?<before>[\\d]+.[\\d]+.[\\d]+ [\\d]+:[\\d]+:[\\d]+)\")?";
         Matcher matcher = Pattern.compile(pattern).matcher(query);
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         if (matcher.find()) {
@@ -450,15 +446,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
         private Integer task;
         private Status status;
 
-        public LogNode(String ip, String name, Date date, Event event, String task, Status status) {
-            this.ip = ip;
-            this.name = name;
-            this.date = date.getTime();
-            this.event = event;
-            this.task = task == null ? -1 : Integer.parseInt(task);
-            this.status = status;
-        }
-
         private LogNode(String log) throws ParseException {
             String[] fields = log.split("\t");
             SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
@@ -477,45 +464,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
             this.event = event;
             this.task = task;
             this.status = status;
-        }
-
-        @Override
-        public String toString() {
-            if (task != -1)
-                return "LogNode{" +
-                        "ip='" + ip + '\'' +
-                        ", name='" + name + '\'' +
-                        ", date=" + date +
-                        ", event=" + event +
-                        ", task=" + task +
-                        ", status=" + status +
-                        '}';
-            else
-                return "LogNode{" +
-                        "ip='" + ip + '\'' +
-                        ", name='" + name + '\'' +
-                        ", date=" + date +
-                        ", event=" + event +
-                        ", status=" + status +
-                        '}';
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            LogNode logNode = (LogNode) o;
-            return Objects.equals(ip, logNode.ip) &&
-                    Objects.equals(name, logNode.name) &&
-                    Objects.equals(date, logNode.date) &&
-                    event == logNode.event &&
-                    Objects.equals(task, logNode.task) &&
-                    status == logNode.status;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(ip, name, date, event, task, status);
         }
 
         public Object get(String fieldName) {
@@ -537,28 +485,16 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
             }
         }
 
-        public String getIp() {
-            return ip;
-        }
+        public String getIp() {return ip;}
 
-        public String getName() {
-            return name;
-        }
+        public String getName() {return name;}
 
-        public Long getDate() {
-            return date;
-        }
+        public Long getDate() {return date;}
 
-        public Event getEvent() {
-            return event;
-        }
+        public Event getEvent() {return event;}
 
-        public Integer getTask() {
-            return task;
-        }
+        public Integer getTask() {return task;}
 
-        public Status getStatus() {
-            return status;
-        }
+        public Status getStatus() {return status;}
     }
 }

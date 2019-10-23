@@ -1,3 +1,4 @@
+/*
 package com.javarush.task.task39.task3913.test;
 
 import com.javarush.task.task39.task3913.Event;
@@ -185,4 +186,4 @@ public class TestLogParser {
 
         return file;
     }
-}
+}*/

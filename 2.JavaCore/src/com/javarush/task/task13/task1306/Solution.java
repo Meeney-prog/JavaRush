@@ -27,12 +27,12 @@ public class Solution {
         public User initializeIdAndName(long id, String name) {
             this.id = id;
             this.name = name;
-            return this;
+            return User.this;
         }
 
         @Override
         public String toString() {
-            return String.format("The user's name is %s, id = %d", this.name, this.id);
+            return String.format("The user's name is %s, id = %d", name, id);
         }
     }
 
