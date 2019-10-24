@@ -1,2 +1,2 @@
 # JavaRush
-My javarush.ru tasks
+My https://javarush.ru/ tasks
