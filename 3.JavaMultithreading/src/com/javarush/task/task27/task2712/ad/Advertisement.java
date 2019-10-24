@@ -18,9 +18,8 @@ public class Advertisement {
     }
 
     public void revalidate() throws UnsupportedOperationException {
-        if (hits-- <= 0) {
+        if (hits-- <= 0)
             throw new UnsupportedOperationException();
-        }
     }
 
     public long getAmountPerOneSecondDisplaying() {

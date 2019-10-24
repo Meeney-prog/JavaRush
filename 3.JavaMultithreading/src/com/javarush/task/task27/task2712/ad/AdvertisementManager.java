@@ -18,9 +18,8 @@ public class AdvertisementManager {
     }
 
     public void processVideos() throws NoVideoAvailableException {
-        if (storage.list().isEmpty() || getFixedMoviesList().isEmpty()) {
+        if (storage.list().isEmpty() || getFixedMoviesList().isEmpty())
             throw new NoVideoAvailableException();
-        }
         List<Advertisement> adList = getBestAdList();
         StatisticManager.getInstance().register(new VideoSelectedEventDataRow(adList, getOverallAmount(adList), getOverallDuration(adList)));
         for (Advertisement advertisement : adList) {
@@ -32,22 +31,18 @@ public class AdvertisementManager {
     private List<Advertisement> getBestAdList() {
         List<List<Advertisement>> allCombinations = new ArrayList<>();
         getAllCombinations(allCombinations, getFixedMoviesList());
-        if (allCombinations.size() != 1) {
+        if (allCombinations.size() != 1)
             allCombinations = filterByAmount(allCombinations);
-        }
-        if (allCombinations.size() != 1) {
+        if (allCombinations.size() != 1)
             allCombinations = filterByDuration(allCombinations);
-        }
-        if (allCombinations.size() != 1) {
+        if (allCombinations.size() != 1)
             allCombinations.sort(Comparator.comparingInt(List::size));
-        }
         return sortResultList(allCombinations.get(0));
     }
 
     private void getAllCombinations(List<List<Advertisement>> lists, List<Advertisement> list) {
-        if (list.size() > 0 && !lists.contains(list)) {
+        if (list.size() > 0 && !lists.contains(list))
             checkAdList(list, lists);
-        }
         for (int i = 0; i < list.size(); i++) {
             List<Advertisement> newSet = new ArrayList<>(list);
             newSet.remove(i);

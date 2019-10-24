@@ -21,49 +21,36 @@ public class Solution {
                 1517841543307505039L, 3289582984443187032L, 4498128791164624869L, 4929273885928088826L
         };
         List<Long> list = new ArrayList<>();
-        for (int i = 0; i < armStrong.length; i++) {
-            if(armStrong[i]<N){
-                list.add(armStrong[i]);
-            }
-        }
+        for (long l : armStrong)
+            if (l < N) list.add(l);
         long[] result = new long[list.size()];
-        for (int i = 0; i < result.length; i++) {
+        for (int i = 0; i < result.length; i++)
             result[i]=list.get(i);
-        }
         return result;
     }
 
     public static long getSum(long N) {
         long sum = 0L;
         String num = Long.toString(N);
-        for (int i = 0; i < num.length(); i++) {
+        for (int i = 0; i < num.length(); i++)
             sum += Math.pow((double) Integer.parseInt(num.substring(i, i + 1)), (double) num.length());
-        }
         return sum;
     }
 
     public static boolean isPass(long l) {
         String str = Long.toString(l);
-        if (str.length() == 1) {
+        if (str.length() == 1)
             return true;
-        }
         for (int i = 1; i < str.length(); i++) {
-            if (str.substring(i,i+1).equals("0")){
-                continue;
-            }
-            if (Integer.parseInt(str.substring(i - 1, i)) > Integer.parseInt(str.substring(i, i + 1))){
-                return false;
-            }
+            if (str.substring(i,i+1).equals("0")) continue;
+            if (Integer.parseInt(str.substring(i - 1, i)) > Integer.parseInt(str.substring(i, i + 1))) return false;
         }
         return true;
     }
 
     public static void main(String[] args) throws IOException {
-        //System.out.println(isPass(407));
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         long[] res = getNumbers(Long.parseLong(reader.readLine()));
-        for (int i = 0; i < res.length; i++) {
-            System.out.println(res[i]+", "+getSum(res[i]));
-        }
+        for (long re : res) System.out.println(re + ", " + getSum(re));
     }
 }

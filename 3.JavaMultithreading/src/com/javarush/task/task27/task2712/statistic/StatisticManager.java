@@ -1,6 +1,5 @@
 package com.javarush.task.task27.task2712.statistic;
 
-import com.javarush.task.task27.task2712.kitchen.Cook;
 import com.javarush.task.task27.task2712.statistic.event.CookedOrderEventDataRow;
 import com.javarush.task.task27.task2712.statistic.event.EventDataRow;
 import com.javarush.task.task27.task2712.statistic.event.EventType;
@@ -13,7 +12,6 @@ import java.util.*;
 public class StatisticManager {
     private static StatisticManager instance = new StatisticManager();
     private StatisticStorage statisticStorage = new StatisticStorage();
-    private Set<Cook> cooks = new HashSet<>();
 
     public static StatisticManager getInstance() {
         return instance;
@@ -33,20 +31,16 @@ public class StatisticManager {
                 return null;
             }
         }).reversed());
-        for (Map.Entry<EventType, List<EventDataRow>> entry : statisticStorage.storage.entrySet()) {
-            if (entry.getKey().equals(EventType.SELECTED_VIDEOS)) {
+        for (Map.Entry<EventType, List<EventDataRow>> entry : statisticStorage.storage.entrySet())
+            if (entry.getKey().equals(EventType.SELECTED_VIDEOS))
                 for (EventDataRow data : entry.getValue()) {
                     String date = format.format(data.getDate());
                     VideoSelectedEventDataRow videoData = (VideoSelectedEventDataRow) data;
                     Double amount = videoData.getAmount() * 0.01d;
-                    if (!result.containsKey(date)) {
+                    if (!result.containsKey(date))
                         result.put(date, amount);
-                    } else {
-                        result.put(date, result.get(date) + amount);
-                    }
+                    else result.put(date, result.get(date) + amount);
                 }
-            }
-        }
         return result;
     }
 
@@ -60,8 +54,8 @@ public class StatisticManager {
                 return null;
             }
         }).reversed());
-        for (Map.Entry<EventType, List<EventDataRow>> entry : statisticStorage.storage.entrySet()) {
-            if (entry.getKey().equals(EventType.COOKED_ORDER)) {
+        for (Map.Entry<EventType, List<EventDataRow>> entry : statisticStorage.storage.entrySet())
+            if (entry.getKey().equals(EventType.COOKED_ORDER))
                 for (EventDataRow data : entry.getValue()) {
                     String date = format.format(data.getDate());
                     String cookName = ((CookedOrderEventDataRow) data).getCookName();
@@ -70,47 +64,29 @@ public class StatisticManager {
                         Map<String, Integer> map = new TreeMap<>();
                         map.put(cookName, workload);
                         result.put(date, map);
-                    } else {
-                        if (!result.get(date).containsKey(cookName)) {
-                            result.get(date).put(cookName, workload);
-                        } else {
-                            result.get(date).put(cookName, result.get(date).get(cookName) + workload);
-                        }
-                    }
+                    } else if (!result.get(date).containsKey(cookName))
+                        result.get(date).put(cookName, workload);
+                    else result.get(date).put(cookName, result.get(date).get(cookName) + workload);
                 }
-            }
-        }
         return result;
-    }
-
-    public void register(Cook cook) {
-        if (cook != null)
-            cooks.add(cook);
     }
 
     public void register(EventDataRow data) {
         getInstance().statisticStorage.storage.get(data.getType()).add(data);
     }
 
-    public Set<Cook> getCooks() {
-        return cooks;
-    }
-
     private class StatisticStorage {
         private Map<EventType, List<EventDataRow>> storage = new HashMap<>();
 
         public StatisticStorage() {
-            for (EventType eventType : EventType.values()) {
+            for (EventType eventType : EventType.values())
                 storage.put(eventType, new ArrayList<>());
-            }
         }
 
         private void put(EventDataRow data) {
-            if (data != null) {
+            if (data != null)
                 storage.get(data.getType()).add(data);
-            }
         }
-
 
         public Map<EventType, List<EventDataRow>> getStorage() {
             return storage;

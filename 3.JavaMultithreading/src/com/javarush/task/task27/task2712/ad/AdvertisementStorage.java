@@ -22,9 +22,8 @@ public class AdvertisementStorage {
     }
 
     public static AdvertisementStorage getInstance() {
-        if (instance == null) {
+        if (instance == null)
             return new AdvertisementStorage();
-        }
         return instance;
     }
 

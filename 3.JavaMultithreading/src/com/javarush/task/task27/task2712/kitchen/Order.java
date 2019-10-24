@@ -14,15 +14,16 @@ public class Order {
         this.tablet = tablet;
         initDishes();
     }
+
     public void initDishes() throws IOException {
         this.dishes = ConsoleHelper.getAllDishesForOrder();
     }
+
     public int getTotalCookingTime() {
         int overallDuration = 0;
-        for (Dish dish : dishes) {
+        for (Dish dish : dishes)
             overallDuration += dish.getDuration();
-        }
-        return overallDuration * 60;
+        return overallDuration;
     }
 
     public boolean isEmpty() {
@@ -39,14 +40,10 @@ public class Order {
 
     @Override
     public String toString() {
-        if (dishes.isEmpty()) {
-            return "";
-        }
+        if (dishes.isEmpty()) return "";
         StringBuilder sb = new StringBuilder();
-        for (Dish dish : dishes) {
-            sb.append(dish);
-            sb.append(", ");
-        }
+        for (Dish dish : dishes)
+            sb.append(dish).append(", ");
         return String.format("Your order: [%s] of %s", sb.toString().substring(0, sb.length() - 2), tablet.toString());
     }
 }

@@ -15,11 +15,9 @@ public enum Dish {
 
     public static String allDishesToString() {
         StringBuilder sb = new StringBuilder();
-        for (Dish dish : values()) {
-            sb.append(dish);
-            sb.append(", ");
-        }
-        return sb.toString().substring(0, sb.length() - 2);
+        for (Dish dish : values())
+            sb.append(dish).append(", ");
+        return sb.substring(0, sb.length() - 2);
     }
 
     public int getDuration() {
